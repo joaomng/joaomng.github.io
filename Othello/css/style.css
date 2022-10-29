@@ -50,7 +50,7 @@
     background-color: brown;
     border-top: 2px solid black;
     border-left: 2px solid black;
-    cursor: pointer;
+    cursor:no-drop;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -115,4 +115,13 @@
 .back{
 	transform: rotateY(180deg);
     
+}
+
+.Bloco_disponivel{
+    width: 102%;
+    height: 102%;
+    background-color: rgba(0, 0, 0, .5);
+    position: absolute;
+    top:-1px;
+    cursor: pointer;
 }
