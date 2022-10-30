@@ -8,11 +8,22 @@
 <body>
     <div class="container">
         <h1>Othello</h1>
-        <div class="row-button">
-            <a href="tabuleiro.html">Jogar</a>
+        <div id="inicio" class="row-button">
+            <a onclick="modoJogo()">Jogar</a>
             <a>Instruções</a>
         </div>
+
+        <div id="modo" style="display: none;" class="row-button">
+            <a href="tabuleiro.html">Modo 1 x 1</a>
+            <a>Modo maquina</a>
+        </div>
     </div>
+    <script>
+        function modoJogo(){
+            document.getElementById("inicio").style.display="none";
+            document.getElementById("modo").style.display="flex";
+        }
+    </script>
 </body>
 
 </html>

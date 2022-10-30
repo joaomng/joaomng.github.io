@@ -35,21 +35,38 @@ matriz[5] = new Array(8);
 matriz[6] = new Array(8);
 matriz[7] = new Array(8);
 
-function criaTabuleiro(){
-for (let i = 1; i < 9; i++) {
-    var element = document.createElement("div");
-    element.className="row";
-    for (let j = 1; j < 9; j++) {
-        var casa =  document.createElement("div");
-        casa.className="casa"  
-        casa.id=`${i}_${j}`
-      //  casa.onclick=function (){adicionarPeca(`${i}_${j}`)}
-        matriz[i-1][j-1]=0;
-        element.appendChild(casa);
+window.onkeydown = function (event) {
+    if (event.key === "Escape") {
+        Cria_Bloco_preto();
     }
-    tabu.appendChild(element)
 }
+criaTabuleiro();
+
+
+function criaTabuleiro(){
+    for (let i = 1; i < 9; i++) {
+        var element = document.createElement("div");
+        element.className="row";
+        for (let j = 1; j < 9; j++) {
+            var casa =  document.createElement("div");
+            casa.className="casa"  
+            casa.id=`${i}_${j}`
+        //  casa.onclick=function (){adicionarPeca(`${i}_${j}`)}
+            matriz[i-1][j-1]=0;
+            element.appendChild(casa);
+        }
+        tabu.appendChild(element);
+    }
+    adicionarPeca('4_4');
+    mudarJogador();
+    adicionarPeca('4_5');
+    mudarJogador();
+    adicionarPeca('5_5');
+    mudarJogador();
+    adicionarPeca('5_4');
+    mudarJogador();
 }
+
 function adicionarPeca(a){
     var x = document.getElementById(`${a}`);
     if(x.childNodes.length<1){
@@ -79,24 +96,6 @@ function adicionarPeca(a){
 
     x.appendChild(flip)}
 }
-criaTabuleiro();
-adicionarPeca('4_4');
-Jogador=2
-adicionarPeca('4_5');
-Jogador=1
-adicionarPeca('5_5');
-Jogador=2
-adicionarPeca('5_4');
-Jogador=1
-
-window.onkeydown = function (event) {
-    if (event.key === "Escape") {
-        Cria_Bloco_preto();
-    }
-
-
-}
-
 
 function flip(a){
     var x = document.getElementById(`${a}`);
@@ -129,16 +128,16 @@ function Retirar_Bloco_preto(array){
 }
 
 function Cria_Bloco_preto(){
-var array = VerificaMovimentosDispoíveis();
-array.map((movimento, index) => {
-    let id=`${movimento.casaPrincipal.I+1}_${movimento.casaPrincipal.J+1}`;
-    console.log(id)
-    let casa = document.getElementById(id)
-    let div = document.createElement("div");
-    div.className="Bloco_disponivel"
-    div.onclick= function (){ realizar_Movimento(array, id, movimento.casasFlip); }
-    casa.appendChild(div);
-  });
+    var array = VerificaMovimentosDispoíveis();
+    array.map((movimento, index) => {
+        let id=`${movimento.casaPrincipal.I+1}_${movimento.casaPrincipal.J+1}`;
+        console.log(id)
+        let casa = document.getElementById(id)
+        let div = document.createElement("div");
+        div.className="Bloco_disponivel"
+        div.onclick= function (){ realizar_Movimento(array, id, movimento.casasFlip); }
+        casa.appendChild(div);
+    });
 
 }
 
@@ -156,7 +155,6 @@ function VerificaCasasVazias(){
     }
     return array
 }
-
 
 function VerificaMovimentosDispoíveis(){
     const array =VerificaCasasVazias();
@@ -376,6 +374,7 @@ function mudarPeca(i,j){
         matriz[i][j]=1;
     }    
 }
+
 function mudarJogador(){
     if(Jogador==1)
         Jogador=2;
