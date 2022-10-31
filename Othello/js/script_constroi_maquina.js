@@ -38,17 +38,19 @@ matriz[5] = new Array(8);
 matriz[6] = new Array(8);
 matriz[7] = new Array(8);
 
-window.onkeydown = function (event) {
+// window.onkeydown = function (event) {
 
-    if (event.key === "Escape") {
-        if((Jogador == jogador_usuario)&&(ja_apertou_esc == 0)){
-            ja_apertou_esc =1;
-            Cria_Bloco_preto();
-        }
-    }
-}
+//     if (event.key === "Escape") {
+//         if((Jogador == jogador_usuario)&&(ja_apertou_esc == 0)){
+//             ja_apertou_esc =1;
+//             Cria_Bloco_preto();
+//         }
+//     }
+// }
+
+
+
 criaTabuleiro();
-
 
 function criaTabuleiro(){
     for (let i = 1; i < 9; i++) {
@@ -121,9 +123,9 @@ function realizar_Movimento(array, id, pecasVirar){//refere-se ao movimento do u
     Retirar_Bloco_preto(array);
     adicionarPeca(id);
     pecasVirar.map((pecas, index)=>{
-    let idPeca=`${pecas.I+1}_${pecas.J+1}`;
-    mudarPeca(pecas.I, pecas.J)
-    flip(idPeca);
+        let idPeca=`${pecas.I+1}_${pecas.J+1}`;
+        mudarPeca(pecas.I, pecas.J)
+        flip(idPeca);
     })
 
     mudarJogador();
@@ -158,6 +160,7 @@ function Retirar_Bloco_preto(array){
 }
 
 function Cria_Bloco_preto(){
+    
     var array = VerificaMovimentosDisponíveis();
     array.map((movimento, index) => {
         let id=`${movimento.casaPrincipal.I+1}_${movimento.casaPrincipal.J+1}`;
@@ -423,6 +426,9 @@ function maquina_joga(){
         if(VerificaMovimentosDisponíveis() == false){
             fim_de_jogo();
         }
+        else{
+            Cria_Bloco_preto()
+        }
         //else o humano joga
     }
     else{
@@ -451,6 +457,12 @@ function maquina_joga(){
 
             mudarJogador();
             maquina_joga();
+        }
+        else{
+            setTimeout(function() {
+                Cria_Bloco_preto();   
+                
+                }, 2000);
         }   
 
         
@@ -503,5 +515,9 @@ window.onload = function(){
       mudarJogador();
       maquina_joga();
     }
+    else{
+    if(Jogador == 2){ //se o jogador escolheu brancas, a máquina começa
+        Cria_Bloco_preto();
+    }}
 }
 

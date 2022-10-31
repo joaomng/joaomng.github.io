@@ -36,16 +36,16 @@ matriz[5] = new Array(8);
 matriz[6] = new Array(8);
 matriz[7] = new Array(8);
 
-window.onkeydown = function (event) {
-    if (event.key === "Escape") {
-        if(ja_apertou_esc == 0){
-            ja_apertou_esc = 1;
-            Cria_Bloco_preto();
-        }
-    }
-}
+// window.onkeydown = function (event) {
+//     if (event.key === "Escape") {
+//         if(ja_apertou_esc == 0){
+//             ja_apertou_esc = 1;
+//             Cria_Bloco_preto();
+//         }
+//     }
+// }
 criaTabuleiro();
-
+Cria_Bloco_preto();
 
 function criaTabuleiro(){
     for (let i = 1; i < 9; i++) {
@@ -55,7 +55,7 @@ function criaTabuleiro(){
             var casa =  document.createElement("div");
             casa.className="casa"  
             casa.id=`${i}_${j}`
-        //  casa.onclick=function (){adicionarPeca(`${i}_${j}`)}
+
             matriz[i-1][j-1]=0;
             element.appendChild(casa);
         }
@@ -68,7 +68,7 @@ function criaTabuleiro(){
     adicionarPeca('5_5');
     mudarJogador();
     adicionarPeca('5_4');
-    //mudarJogador();//não muda mais pq no othello se começa com as pretas
+
 }
 
 
@@ -135,8 +135,11 @@ function realizar_Movimento(array, id, pecasVirar){
                 fim_de_jogo();
             }
         }
-
-    ja_apertou_esc = 0; //agora que o jogador ja jogou o outro pode apertar esc
+        setTimeout(function() {
+               Cria_Bloco_preto();
+            
+            }, 1000);
+   // ja_apertou_esc = 0; //agora que o jogador ja jogou o outro pode apertar esc
     //alert("Mudança de Jogador");
 
 
@@ -400,10 +403,14 @@ function mudarPeca(i,j){
 }
 
 function mudarJogador(){
-    if(Jogador==1)
+    var j =document.getElementById("jogador");
+    if(Jogador==1){
         Jogador=2;
+        j.innerHTML="Jogador 1"
+    }
     else{
         Jogador=1;
+        j.innerHTML="Jogador 2"
     }    
 }
 

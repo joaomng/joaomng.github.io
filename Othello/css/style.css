@@ -147,3 +147,18 @@
     top:-1px;
     cursor: pointer;
 }
+
+.placar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    height: 100vh;
+    width: 35%;     
+
+    margin-right: 5%;
+}
+.placar h1{
+    color: white;
+    font-size: 40px;
+}
