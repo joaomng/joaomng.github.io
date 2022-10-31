@@ -118,22 +118,25 @@ function realizar_Movimento(array, id, pecasVirar){
     Retirar_Bloco_preto(array);
     adicionarPeca(id);
     pecasVirar.map((pecas, index)=>{
-    let idPeca=`${pecas.I+1}_${pecas.J+1}`;
-    mudarPeca(pecas.I, pecas.J)
-    flip(idPeca);
+        let idPeca=`${pecas.I+1}_${pecas.J+1}`;
+        mudarPeca(pecas.I, pecas.J)
+        flip(idPeca);
     })
+
     mudarJogador();
 
-     mov = VerificaMovimentosDisponíveis(); 
+    let mov = VerificaMovimentosDisponíveis(); 
         //alert("verificou movimentos");
         if(mov==false){//vai ser vez do outro jogador de novo
-            
+
             mudarJogador();
+
             let mov2 = VerificaMovimentosDisponíveis();
             if(mov2==false){//nenhum jogador tem movimentos disponíveis, então acabou
                 
                 fim_de_jogo();
             }
+
         }
         setTimeout(function() {
                Cria_Bloco_preto();
@@ -141,8 +144,6 @@ function realizar_Movimento(array, id, pecasVirar){
             }, 1000);
    // ja_apertou_esc = 0; //agora que o jogador ja jogou o outro pode apertar esc
     //alert("Mudança de Jogador");
-
-
 
 }
 
@@ -225,6 +226,7 @@ function VerificaMovimentosDisponíveis(){
             MovimentosPossíveis.push(movimento)
         }    
       });
+
       if(MovimentosPossíveis.length>0){
         return MovimentosPossíveis;
       }
@@ -406,11 +408,13 @@ function mudarJogador(){
     var j =document.getElementById("jogador");
     if(Jogador==1){
         Jogador=2;
-        j.innerHTML="Jogador 1"
+        j.innerHTML="Jogador preto"
+        
     }
-    else{
+    else{     
         Jogador=1;
-        j.innerHTML="Jogador 2"
+        j.innerHTML="Jogador branco"
+        
     }    
 }
 

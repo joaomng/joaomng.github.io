@@ -135,18 +135,26 @@ function realizar_Movimento(array, id, pecasVirar){//refere-se ao movimento do u
     //alert("Mudança de Jogador");
 }
 
-async function realizar_Movimento_comp(id, pecasVirar){
+  function realizar_Movimento_comp(id, pecasVirar){
     //id é, por exemplo, "5_6", na notação humana
 
-    await new Promise(r => setTimeout(r, 1200));
-    adicionarPeca(id);
-    pecasVirar.map((pecas, index)=>{
-    let idPeca=`${pecas.I+1}_${pecas.J+1}`;
-    mudarPeca(pecas.I, pecas.J)
-    flip(idPeca);
-    })
-    mudarJogador();
-    ja_apertou_esc = 0;//agora que é a vez do usuário ele pode apertar esc de novo
+        adicionarPeca(id);
+                    pecasVirar.map((pecas, index)=>{
+                        let idPeca=`${pecas.I+1}_${pecas.J+1}`;
+                        mudarPeca(pecas.I, pecas.J)
+                        flip(idPeca);
+                    })
+                    console.log(` no settimeout ${Jogador} ---1`)
+                    mudarJogador();
+                    console.log(` no settimeout ${Jogador} ---2`)
+
+
+    
+
+            
+     
+    
+    //ja_apertou_esc = 0;//agora que é a vez do usuário ele pode apertar esc de novo
     //alert("Mudança de Jogador");
 }
 
@@ -164,7 +172,7 @@ function Cria_Bloco_preto(){
     var array = VerificaMovimentosDisponíveis();
     array.map((movimento, index) => {
         let id=`${movimento.casaPrincipal.I+1}_${movimento.casaPrincipal.J+1}`;
-        console.log(id)
+        //console.log(id)
         let casa = document.getElementById(id)
         let div = document.createElement("div");
         div.className="Bloco_disponivel"
@@ -434,6 +442,9 @@ function maquina_joga(){
     else{
         
         let tam = mov.length;
+        console.log(Jogador)
+        let id_principal;
+        let aux;
         for(let k =0; k<tam;k++){
             let lance = mov[k];
             let casa = lance.casaPrincipal;
@@ -442,28 +453,38 @@ function maquina_joga(){
             let j = casa_a_flipar.J;
             if(é_peca_adversária(i,j)){
                 //
-                let id_principal=`${casa.I+1}_${casa.J+1}`;
-                realizar_Movimento_comp(id_principal, lance.casasFlip);
+                aux=lance.casasFlip
+                id_principal=`${casa.I+1}_${casa.J+1}`; 
                 break;
             }
             //else vai pra procima iteração
         }
-        
-        //mudarJogador();//agora é a vez do humano
-        //agora que jogou é a vez do humano, a função de movimento já mudou o jogador
-        mov = VerificaMovimentosDisponíveis(); 
-        //alert("verificou movimentos");
-        if(mov==false){//vai ser vez do computador de novo
 
-            mudarJogador();
-            maquina_joga();
-        }
-        else{
-            setTimeout(function() {
-                Cria_Bloco_preto();   
-                
-                }, 2000);
-        }   
+        setTimeout(function() {
+            realizar_Movimento_comp(id_principal, aux); 
+            //mudarJogador();//agora é a vez do humano
+            //agora que jogou é a vez do humano, a função de movimento já mudou o jogador
+            console.log(Jogador)
+            let mov1 = VerificaMovimentosDisponíveis(); 
+                //alert("verificou movimentos");
+            console.log(mov1)
+            if(mov1==false){//vai ser vez do computador de novo
+
+                mudarJogador();
+                maquina_joga();
+            }
+            else{
+                setTimeout(function() {
+                    Cria_Bloco_preto();   
+                        
+                    }, 500);
+            }   
+
+        }, 1200)
+
+
+        
+        
 
         
     }
