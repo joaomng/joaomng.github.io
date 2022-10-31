@@ -23,7 +23,8 @@ class CasaClass {
         return this.j;
     }
 }
-var Jogador=1;
+var Jogador=1;  //1 é branco, 2 é preto
+var ja_apertou_esc = 0;
 var matriz = new Array(8);
 
 matriz[0] = new Array(8);
@@ -37,7 +38,10 @@ matriz[7] = new Array(8);
 
 window.onkeydown = function (event) {
     if (event.key === "Escape") {
-        Cria_Bloco_preto();
+        if(ja_apertou_esc == 0){
+            ja_apertou_esc = 1;
+            Cria_Bloco_preto();
+        }
     }
 }
 criaTabuleiro();
@@ -64,37 +68,40 @@ function criaTabuleiro(){
     adicionarPeca('5_5');
     mudarJogador();
     adicionarPeca('5_4');
-    mudarJogador();
+    //mudarJogador();//não muda mais pq no othello se começa com as pretas
 }
+
 
 function adicionarPeca(a){
     var x = document.getElementById(`${a}`);
     if(x.childNodes.length<1){
-    var flip =  document.createElement("div");
-    flip.className="fliper";
-    var front =  document.createElement("div");
-    front.className="front";
-    var back =  document.createElement("div");
-    back.className="back";
-    var branco =  document.createElement("div");
-    branco.className="whiteP";
-    var preto =  document.createElement("div");
-    preto.className="blackP";
-    matriz[a[0]-1][a[2]-1]=Jogador;
-    if(Jogador ==1){
-        front.appendChild(branco);
-        back.appendChild(preto);
-      
-    }
-    else{
-        front.appendChild(preto);
-        back.appendChild(branco);
-    
-    }
-    flip.appendChild(front);
-    flip.appendChild(back);
+        var flip =  document.createElement("div");
+        flip.className="fliper";
+        var front =  document.createElement("div");
+        front.className="front";
+        var back =  document.createElement("div");
+        back.className="back";
+        var branco =  document.createElement("div");
+        branco.className="whiteP";
+        var preto =  document.createElement("div");
+        preto.className="blackP";
 
-    x.appendChild(flip)}
+        matriz[a[0]-1][a[2]-1]=Jogador;
+        if(Jogador ==1){
+            front.appendChild(branco);
+            back.appendChild(preto);
+      
+        }
+        else{
+            front.appendChild(preto);
+            back.appendChild(branco);
+    
+        }
+        flip.appendChild(front);
+        flip.appendChild(back);
+
+        x.appendChild(flip);
+    }
 }
 
 function flip(a){
@@ -116,7 +123,24 @@ function realizar_Movimento(array, id, pecasVirar){
     flip(idPeca);
     })
     mudarJogador();
+
+     mov = VerificaMovimentosDisponíveis(); 
+        //alert("verificou movimentos");
+        if(mov==false){//vai ser vez do outro jogador de novo
+            
+            mudarJogador();
+            let mov2 = VerificaMovimentosDisponíveis();
+            if(mov2==false){//nenhum jogador tem movimentos disponíveis, então acabou
+                
+                fim_de_jogo();
+            }
+        }
+
+    ja_apertou_esc = 0; //agora que o jogador ja jogou o outro pode apertar esc
     //alert("Mudança de Jogador");
+
+
+
 }
 
 function Retirar_Bloco_preto(array){
@@ -128,7 +152,7 @@ function Retirar_Bloco_preto(array){
 }
 
 function Cria_Bloco_preto(){
-    var array = VerificaMovimentosDispoíveis();
+    var array = VerificaMovimentosDisponíveis();
     array.map((movimento, index) => {
         let id=`${movimento.casaPrincipal.I+1}_${movimento.casaPrincipal.J+1}`;
         console.log(id)
@@ -156,7 +180,7 @@ function VerificaCasasVazias(){
     return array
 }
 
-function VerificaMovimentosDispoíveis(){
+function VerificaMovimentosDisponíveis(){
     const array =VerificaCasasVazias();
     var MovimentosPossíveis = []
     array.map((casa, index) => {
@@ -381,4 +405,37 @@ function mudarJogador(){
     else{
         Jogador=1;
     }    
+}
+
+function fim_de_jogo(){
+
+    //verificar quem ganhou
+    //fazer o alert correspondente
+    let score_brancas = 0
+    let score_pretas = 0;
+
+    for(let i=0;i<8;i++){
+        for(let j=0;j<8;j++){
+            
+            if(matriz[i][j] == 1){
+                score_brancas++;
+            }
+            else if(matriz[i][j] == 2){
+                score_pretas++;
+            }
+
+        }    
+    }
+
+    if(score_brancas>score_pretas){
+        alert("Fim de jogo. Vitória das brancas!!");
+    }
+
+    else if(score_pretas>score_brancas){
+        alert("Fim de jogo. Vitória das pretas!!");
+    }
+
+    else{
+        alert("Fim de jogo. Empate!!");
+    }
 }
