@@ -437,16 +437,24 @@ function fim_de_jogo(){
 
         }    
     }
+    document.getElementById("resultado1").style.display="flex"
+    var x = document.getElementById("valor-resultado1");
+    var array = document.getElementsByClassName("fliper")
+    for (let index = 0; index < array.length; index++) {
+        array[index].style.display="none";
+        
+    }
 
     if(score_brancas>score_pretas){
-        alert("Fim de jogo. Vitória das brancas!!");
+        
+        x.innerHTML="Branca Ganhou!!!"
     }
 
     else if(score_pretas>score_brancas){
-        alert("Fim de jogo. Vitória das pretas!!");
+        x.innerHTML="Preta Ganhou!!!"
     }
 
     else{
-        alert("Fim de jogo. Empate!!");
+        x.innerHTML="Empate!!!"
     }
 }

@@ -511,23 +511,42 @@ function fim_de_jogo(){
 
         }    
     }
+    document.getElementById("resultado").style.display="flex"
+    var x = document.getElementById("valor-resultado");
 
+    var array = document.getElementsByClassName("fliper")
+    for (let index = 0; index < array.length; index++) {
+        array[index].style.display="none";
+        
+    }
     if(score_brancas>score_pretas){
-        alert("Fim de jogo. Vitória das brancas!!");
+        if(jogador_usuario==1){
+            x.innerHTML="Você Ganhou!!!"
+            
+        }
+        if(jogador_usuario==2){
+            x.innerHTML="Você Perdeu!!!"
+        }
     }
 
     else if(score_pretas>score_brancas){
-        alert("Fim de jogo. Vitória das pretas!!");
+        if(jogador_usuario==2){
+            x.innerHTML="Você Ganhou!!!"
+        }
+        if(jogador_usuario==1){
+            x.innerHTML="Você Perdeu!!!"
+        }
+
     }
 
     else{
-        alert("Fim de jogo. Empate!!");
+        alert(" Empate!!");
     }
 }
 
-window.onload = function(){
-
-    Jogador = parseInt(window.prompt("Digite 1 para brancas e 2 para pretas"));
+ function iniciar(valor){
+    document.getElementById("back-escolher").style.display="none";
+    Jogador = valor;
     jogador_usuario = Jogador;
     //alert(Jogador)
 
@@ -538,7 +557,11 @@ window.onload = function(){
     }
     else{
     if(Jogador == 2){ //se o jogador escolheu brancas, a máquina começa
-        Cria_Bloco_preto();
+        setTimeout(function() {
+            Cria_Bloco_preto();   
+                
+            }, 500);
+        
     }}
 }
 

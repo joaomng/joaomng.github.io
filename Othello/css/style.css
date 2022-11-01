@@ -14,14 +14,14 @@
 }
 
 .row-button a{
-    padding: 10px 20px;
-    border-radius: 10px;
-    background-color: #C5D1EB;
-    font-size: 24px;
+    padding: 20px 30px;
+    border-radius: 5px;
+    background-color: #00a7af;
+    font-size: 20px;
     font-weight: 700;
     cursor: pointer;
     text-transform: none;
-    color: black;
+    color: white;
     text-decoration: none;
     font-family: montserrat-bold;
 }
@@ -84,6 +84,7 @@
     transform-style: preserve-3d;
     transition: transform 0.8s;
     position: relative;
+    /* animation: mymove 5s infinite; */
     
 }
 
@@ -162,3 +163,107 @@
     color: white;
     font-size: 40px;
 }
+
+#back-escolher{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.escolher{
+ 
+    width: 50%;
+    height: 50%;
+    border-radius: 10px;
+    background-color: rgb(100, 100, 100);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    min-width: 600px;
+}
+
+.escolher h1{
+    color:#fff;
+   font-size: 50px;
+   font-weight: 900;
+   font-family: montserrat-reg;
+}
+
+.row-peca{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+.centralizar{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    cursor: pointer;
+}
+.centralizar:hover{
+    transform: scale(1.1);
+}
+
+.peca{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+.centralizar h3{
+    font-family: montserrat-reg;
+    font-size: 20px;
+}
+
+#valor-resultado{
+    animation: esc 5s infinite;
+}
+
+
+#resultado{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .5);
+    display: none;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+
+#valor-resultado1{
+    animation: esc 5s infinite;
+}
+
+
+#resultado1{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .5);
+    display: none;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+
+  @keyframes esc {
+    0%   {transform: scale(1)}
+
+    
+    100% {transform: scale(1.5)}
+  }
