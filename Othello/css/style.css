@@ -24,6 +24,11 @@
     color: white;
     text-decoration: none;
     font-family: montserrat-bold;
+    transition: transform 1s;
+}
+
+.row-button a:hover{
+    transform:scale(1.1); 
 }
 .row-button{
     display: flex;
@@ -143,7 +148,7 @@
 .Bloco_disponivel{
     width: 102%;
     height: 102%;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .7);
     position: absolute;
     top:-1px;
     cursor: pointer;

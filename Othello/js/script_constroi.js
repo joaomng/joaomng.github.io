@@ -408,12 +408,12 @@ function mudarJogador(){
     var j =document.getElementById("jogador");
     if(Jogador==1){
         Jogador=2;
-        j.innerHTML="Jogador preto"
+        j.innerHTML="Vez da Preta"
         
     }
     else{     
         Jogador=1;
-        j.innerHTML="Jogador branco"
+        j.innerHTML="Vez da Branca"
         
     }    
 }
