@@ -1,2 +1,2 @@
 # joaomng.github.io
-Site para o trabalho de Desenvolvimento Web I na UFRJ
+Site para os trabalhos de Desenvolvimento Web I na UFRJ
