@@ -1,3 +1,5 @@
+
+
 const tabu = document.getElementById('tabuleiro');
 class Movimento {
     constructor(casaPrincipal, casasFlip) {
@@ -28,6 +30,7 @@ var Jogador=1;  //1 é branco, 2 é preto
 var matriz = new Array(8);
 var ja_apertou_esc = 0;
 var jogador_usuario = 1;
+var profundidade =4; //depth do minimax;mudar para testar
 
 matriz[0] = new Array(8);
 matriz[1] = new Array(8);
@@ -129,7 +132,7 @@ function realizar_Movimento(array, id, pecasVirar){//refere-se ao movimento do u
     })
 
     mudarJogador();
-    maquina_joga();
+    maquina_joga_minimax(profundidade);
     
 
     //alert("Mudança de Jogador");
@@ -453,7 +456,7 @@ function maquina_joga(){
             let j = casa_a_flipar.J;
             if(é_peca_adversária(i,j)){
                 //
-                aux=lance.casasFlip
+                aux=lance.casasFlip;
                 id_principal=`${casa.I+1}_${casa.J+1}`; 
                 break;
             }
@@ -521,7 +524,7 @@ function fim_de_jogo(){
     }
     if(score_brancas>score_pretas){
         if(jogador_usuario==1){
-            x.innerHTML="Você Ganhou!!!"
+            x.innerHTML= "Você Perdeu!!!"
             
         }
         if(jogador_usuario==2){
@@ -540,11 +543,15 @@ function fim_de_jogo(){
     }
 
     else{
-        alert(" Empate!!");
+        x.innerHTML = "Empate!!";
     }
 }
 
  function iniciar(valor){
+
+    profundidade = parseInt(window.prompt("escolha a profundidade do minimax"));
+    
+
     document.getElementById("back-escolher").style.display="none";
     Jogador = valor;
     jogador_usuario = Jogador;
@@ -553,7 +560,7 @@ function fim_de_jogo(){
 
     if(Jogador == 1){ //se o jogador escolheu brancas, a máquina começa
       mudarJogador();
-      maquina_joga();
+      maquina_joga_minimax(profundidade);
     }
     else{
     if(Jogador == 2){ //se o jogador escolheu brancas, a máquina começa
@@ -564,4 +571,629 @@ function fim_de_jogo(){
         
     }}
 }
+
+//MINIMAX A PARTIR DAQUI
+
+//chamar o minimax pra cada movimento em verificarMovimentosDisponíveis, na hora da máquina jogar
+/*function minimax(matrix, depth, jogador, movimento){//versao ruim
+    //a função recebe o tabuleiro "matrix" num estado que é depois do movimento "movimento", 
+    //sabendo que agora é a vez do jogador "jogador"
+
+    //ToDo:
+    //1. VerificaMovimentosDisponíveisMinimax(jogador, matrix);
+    //2. calcScoreGeral(matrix)
+    //3. realizar_Movimento_minimax(jogador, matrix, movimento)
+
+    if((depth == 0) || (VerificaMovimentosDisponíveisMinimax(jogador, matrix) == false)){
+
+        //let score_geral = calcScoreGeral(matrix);
+        let vetor = new Array(2);
+        vetor[0] = movimento;
+        vetor[1] = matrix; //o score geral pode ser calculado a partir dessa matriz
+        return vetor; 
+
+    }
+
+    if(jogador == 2){//maximizing player (preto)
+
+        let maxEval = -65;
+        let mov = VerificaMovimentosDisponíveisMinimax(jogador, matrix);
+        let vet_atual = new Array(2);
+        let indice_movimento =0
+
+        for(let i=0;i<mov.length;i++){
+
+            let matrix2 = realizar_Movimento_minimax(jogador, matrix, mov[i]);
+            let vetor = minimax(matrix2, depth-1, 1, mov[i]);
+            let score_geral = calcScoreGeral(matrix2);//ou deveria ser
+            //let score_geral = calcScoreGeral(vetor[1]) //? acho que dá no mesmo
+            if(score_geral>maxEval){
+                maxEval = scoreGeral; //esse é o score correspondente ao vetor, que sugere o movimento vetor[0],
+                vet_atual = vetor;    //que gera a matriz vetor[1]
+                indice_movimento = i;
+            }
+
+        } 
+
+        vet_atual[0] = mov[indice_movimento]
+        vet_atual[1] = realizar_Movimento_minimax(jogador,matrix,mov[indice_movimento])
+
+        return vet_atual;
+
+    }
+
+    else{//jogador == 1
+
+        let minEval = 65;
+        let mov = VerificaMovimentosDisponíveisMinimax(jogador, matrix);
+        let vet_atual = new Array(2);
+
+        for(let i=0;i<mov.length;i++){
+
+            let matrix2 = realizar_Movimento_minimax(jogador, matrix, mov[i]);
+            let vetor = minimax(matrix2, depth-1, 2, mov[i]);
+            let score_geral = calcScoreGeral(matrix2);//ou deveria ser
+            //let score_geral = calcScoreGeral(vetor[1]) //?
+            if(score_geral<minEval){
+                minEval = scoreGeral; //esse é o score correspondente ao vetor, que sugere o movimento vetor[0],
+                vet_atual = vetor;    //que gera a matriz vetor[1]
+            }
+
+        } 
+
+        return vet_atual;
+
+
+    }
+
+
+}
+
+*/
+
+
+
+function minimax_simples(matrix, depth, jogador){
+
+
+    //a função recebe o tabuleiro "matrix" num estado que é depois de um certo movimento realizado
+    //pelo adversário do jogador "jogador"
+
+    //ToDo:
+    //1. realizar_Movimento_minimax(jogador, matrix, movimento); lembrar de usar copia_matriz logo no começo
+    
+    //alert("vai pro if do caso base");
+    if((depth == 0) || (VerificaMovimentosDisponíveisMinimax(jogador, matrix) == false)){
+
+        return calcScoreGeral(matrix); 
+
+    }
+    //alert("passou do if do caso base");
+
+    if(jogador == 2){//maximizing player (preto)
+
+        let maxEval = -65;
+        let mov = VerificaMovimentosDisponíveisMinimax(jogador, matrix);
+        let score =0;
+
+        for(let i=0;i<mov.length;i++){
+
+            let matrix2 = realizar_Movimento_minimax(jogador, matrix, mov[i]);
+            //let pontuacao = calcScoreGeral(matrix2);
+            let score = minimax_simples(matrix2, depth-1, 1);
+            //let score_geral = calcScoreGeral(matrix2); //essa é a matriz após o movimento (mov[i])
+
+            if(score>maxEval){
+                maxEval = score;
+            }
+
+        } 
+
+        return maxEval;
+
+    }
+
+    else{//jogador == 1
+
+        let minEval = 65;
+        let mov = VerificaMovimentosDisponíveisMinimax(jogador, matrix);
+        let score = 0;
+
+        for(let i=0;i<mov.length;i++){
+
+            let matrix2 = realizar_Movimento_minimax(jogador, matrix, mov[i]);
+            //let pontuacao = calcScoreGeral(matrix2);
+            let score = minimax_simples(matrix2, depth-1, 2);
+            //let score_geral = calcScoreGeral(matrix2);//essa é a matriz após o movimento (mov[i])
+
+            if(score<minEval){
+                minEval = score;   
+            }
+
+        } 
+
+        return minEval;
+
+
+    }
+
+
+}
+
+
+
+function maquina_joga_minimax(depth){
+    
+    //alert("vai verificar movimentos");
+    //alert("entou em maquina joga minimax");
+
+    let mov = VerificaMovimentosDisponíveis();
+    let minEval = 65;
+    let maxEval = -65;  
+    let score = 0;
+    //alert("verificou movimentos");
+    if(mov==false){//maquina nao tem movimentos
+        mudarJogador();//agora é a vez do humano
+        if(VerificaMovimentosDisponíveis() == false){
+            fim_de_jogo();
+        }
+        else{
+            Cria_Bloco_preto()
+        }
+        //else o humano joga
+    }
+
+    else{
+        
+        
+        let tam = mov.length;
+        console.log(Jogador);
+        let id_principal;
+        let aux = copia_matriz(matriz);
+        let indice_movimento = 0;
+
+        for(let k=0;k<tam;k++){
+            
+            
+            let matrix2 = realizar_Movimento_minimax(Jogador, aux, mov[k]);
+
+            //let pontuacao = calcScoreGeral(matrix2);
+            
+            if(Jogador==2){
+                
+                //alert("vai chamar o minimax_simples");
+                score = minimax_simples(matrix2,depth,1);
+                //alert("chamou");
+            
+                if(score>maxEval){
+                    maxEval = score;
+                    indice_movimento = k;
+                }
+            }
+
+            else{
+                 
+                score = minimax_simples(matrix2,depth,2);
+
+                if(score<minEval){
+                    minEval = score;
+                    indice_movimento = k;
+                }
+
+            }
+    
+        }
+        
+        //alert("saiu do for do minimax");
+
+        let lance = mov[indice_movimento];
+        let casa = lance.casaPrincipal;
+        id_principal=`${casa.I+1}_${casa.J+1}`;
+        //let casa_a_flipar = lance.casasFlip[0];
+        //let i = casa_a_flipar.I;
+        //let j = casa_a_flipar.J;
+
+        setTimeout(function() {
+            realizar_Movimento_comp(id_principal, lance.casasFlip); 
+            //mudarJogador();//agora é a vez do humano
+            //agora que jogou é a vez do humano, a função de movimento já mudou o jogador
+            console.log(Jogador)
+            let mov1 = VerificaMovimentosDisponíveis(); 
+                //alert("verificou movimentos");
+            console.log(mov1)
+            if(mov1==false){//vai ser vez do computador de novo
+
+                mudarJogador();
+                maquina_joga_minimax(depth);
+            }
+            else{
+                setTimeout(function() {
+                    Cria_Bloco_preto();   
+                        
+                    }, 500);
+            }   
+
+        }, 1200)
+
+
+        
+        
+
+        
+    }
+   
+
+}
+
+
+function copia_matriz(matrix){
+   //serve exclusivamente para copiar a matriz referente ao tabuleiro do jogo;
+
+   let aux = new Array(8);
+   for(let i=0;i<8;i++){
+        aux[i] = new Array(8);
+   } 
+
+   for(let i=0; i<8;i++){
+   
+       for(let j=0; j<8;j++){
+
+            aux[i][j] = matrix[i][j];
+       } 
+
+   }
+
+   return aux;
+
+
+}
+
+
+function calcScoreGeral(matrix){
+    
+    //A convenção é que score = número de PRETAS - número de BRANCAS, nesta ordem
+    //então se tem 8 pretas e 10 brancas, o score é -2
+    //Assim, para efeitos de minimax, a estratégia do PRETO é MAXIMIZAR o score, 
+    //e a estratégia do BRANCO é MINIMIZÁ-LO.
+
+    let score_brancas = 0;
+    let score_pretas = 0;
+
+    for(let i=0;i<8;i++){
+        for(let j=0;j<8;j++){
+
+            if(matriz[i][j] == 1){
+                score_brancas++;
+            }
+            else if(matriz[i][j] == 2){
+                score_pretas++;
+            }
+
+        }
+    }
+
+    return score_pretas - score_brancas;
+
+}
+
+
+function VerificaMovimentosDisponíveisMinimax(jogador, matrix){
+        //retorna um array de movimentos correspondentes aos
+        //moimentos disponíveis de "jogador" para o tabuleiro "matrix"
+        //dado. Se não houver nenhum movimento retorna false
+        
+         
+
+        const array =VerificaCasasVaziasMinimax(matrix);
+        //alert("verificou casas vazias");
+        var MovimentosPossíveisMinimax = []
+
+        array.map((casa, index) => {
+            let arrayPecasVirar=[];
+            let condicao=Top_left_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            condicao=Top_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            condicao=Top_right_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+
+            condicao=Left_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            condicao=Right_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            condicao=Bottom_left_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            condicao=Bottom_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            condicao=Bottom_right_way_minimax(casa.I, casa.J,jogador,matrix)
+            if(condicao!=false){
+                arrayPecasVirar=arrayPecasVirar.concat(condicao)
+            }
+            if(arrayPecasVirar.length>0){
+                var movimentoMinimax =new Movimento(new CasaClass(casa.i, casa.j), arrayPecasVirar)
+                MovimentosPossíveisMinimax.push(movimentoMinimax)
+            }    
+        });
+
+        if(MovimentosPossíveisMinimax.length>0){
+            //alert("tem movimentos");
+            return MovimentosPossíveisMinimax;
+        }
+        else{
+            return false;
+        }
+
+}
+
+
+function VerificaCasasVaziasMinimax(matrix){
+   //usa a matriz passada como parâmetro, em vez da matriz global
+
+    var array = [];  
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if(matrix[i][j]==0){
+            var ob= new CasaClass(i,j)
+                array.push(ob)
+            }
+        
+        }   
+        
+    }
+    return array
+}
+
+
+
+function é_peca_adversária_minimax(i,j,jogador,matrix){
+    return !é_casa_vazia_minimax(i,j,matrix) && matrix[i][j]!=jogador;
+}
+
+function é_casa_vazia_minimax(i,j,matrix){
+   
+    return matrix[i][j]==0
+}
+
+
+function Top_left_way_minimax(i_inicial, j_inicial,jogador,matrix){
+
+    //vê se tem movimento disponível nessa direção, mas usando jogador e matriz passados como parâmetro
+    //em vez dos globais
+    
+    //alert(`entrou em top_left_way para i:${i_inicial}, j:${j_inicial}`);
+    var array =[];
+
+    let i=i_inicial-1
+    let j =j_inicial-1 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        i=i-1
+        j=j-1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+
+        //if(i==0 && i_inicial==1 && j_inicial==2 && j==1){
+          //  alert("vai retornar false");
+        //}
+
+        return false;
+    }
+} 
+
+
+
+
+function Top_way_minimax(i_inicial, j_inicial,jogador,matrix){
+
+   
+    //alert("entrou em top_way");
+
+    var array =[];
+
+    let i=i_inicial-1
+    let j =j_inicial 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        i=i-1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+        return false
+    }
+} 
+
+function Top_right_way_minimax(i_inicial, j_inicial,jogador,matrix){
+
+   
+
+    //alert("entrou em top_right_way");
+
+    var array =[];
+
+    let i=i_inicial-1
+    let j =j_inicial+1 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        i=i-1
+        j=j+1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+        return false
+    }
+} 
+
+function Left_way_minimax(i_inicial, j_inicial,jogador,matrix){
+    
+   
+    //alert("entrou em left_way");
+    var array =[];
+
+    let i=i_inicial
+    let j =j_inicial-1 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        j=j-1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+        return false
+    }
+}
+
+function Right_way_minimax(i_inicial, j_inicial,jogador,matrix){
+    
+   
+    //alert("entrou em right_way");
+    var array =[];
+
+    let i=i_inicial
+    let j =j_inicial+1 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        j=j+1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+        return false
+    }
+} 
+
+function Bottom_left_way_minimax(i_inicial, j_inicial,jogador,matrix){
+
+    //alert("entrou em bottom_left_way");
+
+    var array =[];
+
+    let i=i_inicial+1
+    let j =j_inicial-1 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        i=i+1
+        j=j-1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+        return false
+    }
+} 
+
+function Bottom_way_minimax(i_inicial, j_inicial,jogador,matrix){
+    //alert("entrou em bottom way")
+    var array =[];
+
+   
+
+    let i=i_inicial+1
+    let j =j_inicial 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        i=i+1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        return array
+    }
+    else{
+        return false
+    }
+} 
+
+function Bottom_right_way_minimax(i_inicial, j_inicial,jogador,matrix){
+
+    //alert("entrou em bottom right way")
+    
+    //if(i_inicial==1 && j_inicial==2){
+      //      alert("entrou bottom right 1,2");
+        //}
+
+    var array =[];
+
+    let i=i_inicial+1
+    let j =j_inicial+1 
+    while(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && é_peca_adversária_minimax(i,j,jogador,matrix)){
+
+       //if(i_inicial==1 && j_inicial==2){
+         //   alert("entrou no while");
+        //}
+
+        var ob= new CasaClass(i,j)
+        array.push(ob)
+        i=i+1
+        j=j+1
+    }
+    if(DentroDoLimite(i,j) && !é_casa_vazia_minimax(i,j,matrix) && !é_peca_adversária_minimax(i,j,jogador,matrix)){
+        //if(i==2 && i_inicial==1 && j_inicial==2 && j==3){
+          //  alert("vai retornar movimento bottom right");
+        //}
+        return array
+    }
+    else{
+
+       // if(i==2 && i_inicial==1 && j_inicial==2 && j==3){
+         //   alert("vai retornar false bottom right");
+        //}
+        return false
+    }
+}
+
+
+
+function realizar_Movimento_minimax(jogador, matrix, movimento){
+    
+    //simula o "movimento" de "jogador" em uma cópia de "matrix" e retorna tal cópia 
+    
+
+    let aux = copia_matriz(matrix);
+    let principal = movimento.casaPrincipal;
+    let i = principal.I;
+    let j = principal.J;
+    aux[i][j] = jogador //coloca a peça nova no tabuleiro
+
+    let casasFlip = movimento.casasFlip;
+    let tam = casasFlip.length;
+    
+    for(let k=0;k<tam;k++){
+        let casa = casasFlip[k];
+        aux[casa.I][casa.J] = jogador; 
+    }
+    
+
+    return aux;
+}
+
+
 
