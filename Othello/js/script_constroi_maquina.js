@@ -549,21 +549,21 @@ function fim_de_jogo(){
 
  function iniciar(valor){
 
-    profundidade = parseInt(window.prompt("escolha a profundidade do minimax"));
-    
+   
 
     document.getElementById("back-escolher").style.display="none";
     Jogador = valor;
     jogador_usuario = Jogador;
     //alert(Jogador)
-
+    
+    profundidade = parseInt(window.prompt("escolha a profundidade do minimax"));
 
     if(Jogador == 1){ //se o jogador escolheu brancas, a máquina começa
       mudarJogador();
       maquina_joga_minimax(profundidade);
     }
     else{
-    if(Jogador == 2){ //se o jogador escolheu brancas, a máquina começa
+    if(Jogador == 2){ //se o jogador escolheu pretas, ele começa
         setTimeout(function() {
             Cria_Bloco_preto();   
                 
