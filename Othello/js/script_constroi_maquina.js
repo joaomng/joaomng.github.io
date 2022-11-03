@@ -1,3 +1,6 @@
+//chamar maquina_joga_minimax em TODAS as situações em que a máquina for jogar
+
+
 
 
 const tabu = document.getElementById('tabuleiro');
@@ -524,7 +527,7 @@ function fim_de_jogo(){
     }
     if(score_brancas>score_pretas){
         if(jogador_usuario==1){
-            x.innerHTML= "Você Perdeu!!!"
+            x.innerHTML= "Você Ganhou!!!"
             
         }
         if(jogador_usuario==2){
@@ -549,12 +552,14 @@ function fim_de_jogo(){
 
  function iniciar(valor){
 
-   
+    
+    
 
     document.getElementById("back-escolher").style.display="none";
     Jogador = valor;
     jogador_usuario = Jogador;
-    //alert(Jogador)
+    //alert(`${jogador_usuario}`);
+
     
     profundidade = parseInt(window.prompt("escolha a profundidade do minimax"));
 
