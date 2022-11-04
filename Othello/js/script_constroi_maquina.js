@@ -550,19 +550,10 @@ function fim_de_jogo(){
     }
 }
 
- function iniciar(valor){
 
-    
-    
-
-    document.getElementById("back-escolher").style.display="none";
-    Jogador = valor;
-    jogador_usuario = Jogador;
-    //alert(`${jogador_usuario}`);
-
-    
-    profundidade = parseInt(window.prompt("escolha a profundidade do minimax"));
-
+function escolherDificuldade(dificuldade){
+    document.getElementById("back-dificuldade").style.display="none";
+    profundidade=dificuldade;
     if(Jogador == 1){ //se o jogador escolheu brancas, a máquina começa
       mudarJogador();
       maquina_joga_minimax(profundidade);
@@ -575,6 +566,25 @@ function fim_de_jogo(){
             }, 500);
         
     }}
+
+
+}
+
+ function iniciar(valor){
+ 
+
+    document.getElementById("back-escolher").style.display="none";
+    Jogador = valor;
+    jogador_usuario = Jogador;
+    document.getElementById("back-dificuldade").style.display="flex";
+
+
+    //alert(`${jogador_usuario}`);
+
+    
+    
+
+    
 }
 
 //MINIMAX A PARTIR DAQUI
@@ -798,6 +808,10 @@ function maquina_joga_minimax(depth){
         //let i = casa_a_flipar.I;
         //let j = casa_a_flipar.J;
 
+        let time = 1200;
+        if(profundidade==5)
+            time=600;
+
         setTimeout(function() {
             realizar_Movimento_comp(id_principal, lance.casasFlip); 
             //mudarJogador();//agora é a vez do humano
@@ -818,7 +832,7 @@ function maquina_joga_minimax(depth){
                     }, 500);
             }   
 
-        }, 1200)
+        }, time)
 
 
         
