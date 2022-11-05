@@ -134,7 +134,7 @@ function realizar_Movimento(array, id, pecasVirar){
             let mov2 = VerificaMovimentosDisponíveis();
             if(mov2==false){//nenhum jogador tem movimentos disponíveis, então acabou
                 
-                fim_de_jogo();
+                setTimeout(fim_de_jogo(),3000);
             }
 
         }
@@ -420,6 +420,8 @@ function mudarJogador(){
 
 function fim_de_jogo(){
 
+    setTimeout(function(){
+
     //verificar quem ganhou
     //fazer o alert correspondente
     let score_brancas = 0
@@ -457,4 +459,6 @@ function fim_de_jogo(){
     else{
         x.innerHTML="Empate!!!"
     }
+
+    },1500);
 }
