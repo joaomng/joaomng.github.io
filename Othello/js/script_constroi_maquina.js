@@ -493,7 +493,7 @@ function fim_de_jogo(){
         x.innerHTML = "Empate!!";
     }
 
-    },1500);
+    },2000);
 
     
 }
