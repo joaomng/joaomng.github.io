@@ -430,78 +430,16 @@ function mudarJogador(){
     }    
 }
 
-function maquina_joga(){
-    
-    //alert("vai verificar movimentos");
-    let mov = VerificaMovimentosDisponíveis();
-    //alert("verificou movimentos");
-    if(mov==false){//maquina nao tem movimentos
-        mudarJogador();//agora é a vez do humano
-        if(VerificaMovimentosDisponíveis() == false){
-            fim_de_jogo();
-        }
-        else{
-            Cria_Bloco_preto()
-        }
-        //else o humano joga
-    }
-    else{
-        
-        let tam = mov.length;
-        console.log(Jogador)
-        let id_principal;
-        let aux;
-        for(let k =0; k<tam;k++){
-            let lance = mov[k];
-            let casa = lance.casaPrincipal;
-            let casa_a_flipar = lance.casasFlip[0];
-            let i = casa_a_flipar.I;
-            let j = casa_a_flipar.J;
-            if(é_peca_adversária(i,j)){
-                //
-                aux=lance.casasFlip;
-                id_principal=`${casa.I+1}_${casa.J+1}`; 
-                break;
-            }
-            //else vai pra procima iteração
-        }
 
-        setTimeout(function() {
-            realizar_Movimento_comp(id_principal, aux); 
-            //mudarJogador();//agora é a vez do humano
-            //agora que jogou é a vez do humano, a função de movimento já mudou o jogador
-            console.log(Jogador)
-            let mov1 = VerificaMovimentosDisponíveis(); 
-                //alert("verificou movimentos");
-            console.log(mov1)
-            if(mov1==false){//vai ser vez do computador de novo
-
-                mudarJogador();
-                maquina_joga();
-            }
-            else{
-                setTimeout(function() {
-                    Cria_Bloco_preto();   
-                        
-                    }, 500);
-            }   
-
-        }, 1200)
-
-
-        
-        
-
-        
-    }
-   
-
-}
 
 function fim_de_jogo(){
 
+    setTimeout(function(){
+
     //verificar quem ganhou
     //fazer o alert correspondente
+
+    
     let score_brancas = 0
     let score_pretas = 0;
 
@@ -517,6 +455,7 @@ function fim_de_jogo(){
 
         }    
     }
+    
     document.getElementById("resultado").style.display="flex"
     var x = document.getElementById("valor-resultado");
 
@@ -525,6 +464,11 @@ function fim_de_jogo(){
         array[index].style.display="none";
         
     }
+
+    
+                       
+                        
+                    
     if(score_brancas>score_pretas){
         if(jogador_usuario==1){
             x.innerHTML= "Você Ganhou!!!"
@@ -548,6 +492,10 @@ function fim_de_jogo(){
     else{
         x.innerHTML = "Empate!!";
     }
+
+    },1500);
+
+    
 }
 
 
@@ -589,82 +537,7 @@ function escolherDificuldade(dificuldade){
 
 //MINIMAX A PARTIR DAQUI
 
-//chamar o minimax pra cada movimento em verificarMovimentosDisponíveis, na hora da máquina jogar
-/*function minimax(matrix, depth, jogador, movimento){//versao ruim
-    //a função recebe o tabuleiro "matrix" num estado que é depois do movimento "movimento", 
-    //sabendo que agora é a vez do jogador "jogador"
 
-    //ToDo:
-    //1. VerificaMovimentosDisponíveisMinimax(jogador, matrix);
-    //2. calcScoreGeral(matrix)
-    //3. realizar_Movimento_minimax(jogador, matrix, movimento)
-
-    if((depth == 0) || (VerificaMovimentosDisponíveisMinimax(jogador, matrix) == false)){
-
-        //let score_geral = calcScoreGeral(matrix);
-        let vetor = new Array(2);
-        vetor[0] = movimento;
-        vetor[1] = matrix; //o score geral pode ser calculado a partir dessa matriz
-        return vetor; 
-
-    }
-
-    if(jogador == 2){//maximizing player (preto)
-
-        let maxEval = -65;
-        let mov = VerificaMovimentosDisponíveisMinimax(jogador, matrix);
-        let vet_atual = new Array(2);
-        let indice_movimento =0
-
-        for(let i=0;i<mov.length;i++){
-
-            let matrix2 = realizar_Movimento_minimax(jogador, matrix, mov[i]);
-            let vetor = minimax(matrix2, depth-1, 1, mov[i]);
-            let score_geral = calcScoreGeral(matrix2);//ou deveria ser
-            //let score_geral = calcScoreGeral(vetor[1]) //? acho que dá no mesmo
-            if(score_geral>maxEval){
-                maxEval = scoreGeral; //esse é o score correspondente ao vetor, que sugere o movimento vetor[0],
-                vet_atual = vetor;    //que gera a matriz vetor[1]
-                indice_movimento = i;
-            }
-
-        } 
-
-        vet_atual[0] = mov[indice_movimento]
-        vet_atual[1] = realizar_Movimento_minimax(jogador,matrix,mov[indice_movimento])
-
-        return vet_atual;
-
-    }
-
-    else{//jogador == 1
-
-        let minEval = 65;
-        let mov = VerificaMovimentosDisponíveisMinimax(jogador, matrix);
-        let vet_atual = new Array(2);
-
-        for(let i=0;i<mov.length;i++){
-
-            let matrix2 = realizar_Movimento_minimax(jogador, matrix, mov[i]);
-            let vetor = minimax(matrix2, depth-1, 2, mov[i]);
-            let score_geral = calcScoreGeral(matrix2);//ou deveria ser
-            //let score_geral = calcScoreGeral(vetor[1]) //?
-            if(score_geral<minEval){
-                minEval = scoreGeral; //esse é o score correspondente ao vetor, que sugere o movimento vetor[0],
-                vet_atual = vetor;    //que gera a matriz vetor[1]
-            }
-
-        } 
-
-        return vet_atual;
-
-
-    }
-
-
-}
-
-*/
 
 
 
@@ -750,7 +623,7 @@ function maquina_joga_minimax(depth){
     if(mov==false){//maquina nao tem movimentos
         mudarJogador();//agora é a vez do humano
         if(VerificaMovimentosDisponíveis() == false){
-            fim_de_jogo();
+            setTimeout(fim_de_jogo(),3000);
         }
         else{
             Cria_Bloco_preto()
@@ -1215,4 +1088,71 @@ function realizar_Movimento_minimax(jogador, matrix, movimento){
 }
 
 
+/*FIM DO MINIMAX
+    function maquina_joga(){//sem IA
+    
+    //alert("vai verificar movimentos");
+    let mov = VerificaMovimentosDisponíveis();
+    //alert("verificou movimentos");
+    if(mov==false){//maquina nao tem movimentos
+        mudarJogador();//agora é a vez do humano
+        if(VerificaMovimentosDisponíveis() == false){
+            fim_de_jogo();
+        }
+        else{
+            Cria_Bloco_preto()
+        }
+        //else o humano joga
+    }
+    else{
+        
+        let tam = mov.length;
+        console.log(Jogador)
+        let id_principal;
+        let aux;
+        for(let k =0; k<tam;k++){
+            let lance = mov[k];
+            let casa = lance.casaPrincipal;
+            let casa_a_flipar = lance.casasFlip[0];
+            let i = casa_a_flipar.I;
+            let j = casa_a_flipar.J;
+            if(é_peca_adversária(i,j)){
+                //
+                aux=lance.casasFlip;
+                id_principal=`${casa.I+1}_${casa.J+1}`; 
+                break;
+            }
+            //else vai pra procima iteração
+        }
 
+        setTimeout(function() {
+            realizar_Movimento_comp(id_principal, aux); 
+            //mudarJogador();//agora é a vez do humano
+            //agora que jogou é a vez do humano, a função de movimento já mudou o jogador
+            console.log(Jogador)
+            let mov1 = VerificaMovimentosDisponíveis(); 
+                //alert("verificou movimentos");
+            console.log(mov1)
+            if(mov1==false){//vai ser vez do computador de novo
+
+                mudarJogador();
+                maquina_joga();
+            }
+            else{
+                setTimeout(function() {
+                    Cria_Bloco_preto();   
+                        
+                    }, 500);
+            }   
+
+        }, 1200)
+
+
+        
+        
+
+        
+    }
+   
+
+} */
