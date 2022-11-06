@@ -277,6 +277,23 @@
 }
 
 
+#rodape{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    background-color: rgba(0, 0, 0, .5);
+  }
+
+#rodape p{
+    color: #fff;
+    font-family: montserrat-reg;
+  }
+
   @keyframes esc {
     0%   {transform: scale(1)}
 
@@ -286,19 +303,3 @@
 
 
 
-  footer{
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 60px;
-        background-color: rgba(0, 0, 0, .5);
-  }
-
-  footer p{
-    color: #fff;
-    font-family: montserrat-reg;
-  }
